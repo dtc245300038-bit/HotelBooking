@@ -1,0 +1,83 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: hotel_db
+    environment:
+      POSTGRES_DB: hotel_db
+      POSTGRES_USER: hotel_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - hotel_network
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: hotel_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@hotel.com
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:?Set PGADMIN_PASSWORD in .env}
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - hotel_network
+    restart: unless-stopped
+
+  web:
+    build: ./app
+    container_name: hotel_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app:/app
+    ports:
+      - "8001:8000"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: hotel_db
+      DATABASE_USER: hotel_user
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    depends_on:
+      - db
+    networks:
+      - hotel_network
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: hotel_nginx
+    ports:
+      - "8088:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - web
+    networks:
+      - hotel_network
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: hotel_prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    networks:
+      - hotel_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: hotelbooking_postgres_data
+
+networks:
+  hotel_network:
+    driver: bridge

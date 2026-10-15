@@ -1,0 +1,562 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đặt phòng {{ room.room_number }} | Khách sạn ABC</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #f8f5ef;
+            --white: #ffffff;
+            --brown: #3d291e;
+            --gold: #b58a3a;
+            --gold-dark: #94702e;
+            --text: #40372f;
+            --muted: #81766c;
+            --border: #e8dfd3;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            color: var(--gold-dark);
+            font-family: Georgia, serif;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .logo small {
+            display: block;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .nav-link {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: var(--gold-dark);
+        }
+
+        .hero {
+            min-height: 230px;
+            padding: 48px 20px;
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(
+                    rgba(45, 29, 19, 0.78),
+                    rgba(45, 29, 19, 0.78)
+                ),
+                url("https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1600&q=80")
+                center / cover no-repeat;
+        }
+
+        .hero .eyebrow {
+            color: #e4bd70;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .hero h1 {
+            font-family: Georgia, serif;
+            font-size: clamp(30px, 5vw, 44px);
+            margin: 10px 0;
+        }
+
+        .hero p {
+            color: #f4e9dc;
+            font-size: 15px;
+        }
+
+        .container {
+            width: min(1050px, 92%);
+            margin: 35px auto 65px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: var(--gold-dark);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .back:hover {
+            color: var(--brown);
+        }
+
+        .booking-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+            gap: 25px;
+            align-items: start;
+        }
+
+        .room-card,
+        .form-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 28px rgba(58, 40, 23, 0.07);
+        }
+
+        .room-image {
+            height: 230px;
+            background:
+                url("https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80")
+                center / cover no-repeat;
+        }
+
+        .room-details {
+            padding: 24px;
+        }
+
+        .room-label {
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .room-details h2 {
+            font-family: Georgia, serif;
+            color: var(--brown);
+            font-size: 25px;
+            margin: 8px 0 14px;
+        }
+
+        .room-description {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .room-meta {
+            padding: 13px 0;
+            border-top: 1px solid #eee7de;
+            font-size: 14px;
+        }
+
+        .price-label {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 16px;
+        }
+
+        .price {
+            color: var(--gold-dark);
+            font-family: Georgia, serif;
+            font-size: 27px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .price small {
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        .form-card {
+            padding: 30px;
+        }
+
+        .form-heading {
+            margin-bottom: 25px;
+        }
+
+        .form-heading .eyebrow {
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .form-heading h2 {
+            font-family: Georgia, serif;
+            color: var(--brown);
+            font-size: 29px;
+            margin: 5px 0 8px;
+        }
+
+        .form-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            min-width: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .required {
+            color: #b64b3c;
+        }
+
+        input,
+        textarea {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fffdfa;
+            color: var(--text);
+            font: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(181, 138, 58, 0.12);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .message {
+            padding: 13px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message-error {
+            background: #fdecea;
+            color: #9b2c25;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message-success {
+            background: #e8f8ef;
+            color: #218838;
+            border: 1px solid #c3e6cb;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px 18px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 8px;
+            background: var(--gold);
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--gold-dark);
+            transform: translateY(-1px);
+        }
+
+        .form-note {
+            margin-top: 14px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .footer {
+            padding: 25px 20px;
+            background: var(--brown);
+            color: #f6eee3;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 760px) {
+            .booking-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .room-image {
+                height: 250px;
+            }
+
+            .form-card {
+                padding: 24px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .hero {
+                padding: 38px 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .room-details h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="{% url 'home' %}" class="logo">
+            Khách sạn ABC
+            <small>COMFORT · LUXURY · RELAX</small>
+        </a>
+
+        <a href="{% url 'home' %}" class="nav-link">
+            Trang chủ
+        </a>
+    </header>
+
+    <section class="hero">
+        <div class="eyebrow">Đặt phòng trực tuyến</div>
+        <h1>Đặt kỳ nghỉ của bạn</h1>
+        <p>Hoàn thành thông tin bên dưới để gửi yêu cầu đặt phòng.</p>
+    </section>
+
+    <main class="container">
+
+        <a href="{% url 'home' %}" class="back">
+            ← Quay lại danh sách phòng
+        </a>
+
+        <div class="booking-layout">
+
+            <!-- Thông tin phòng -->
+            <aside class="room-card">
+
+                <div class="room-image"></div>
+
+                <div class="room-details">
+                    <div class="room-label">Thông tin phòng</div>
+
+                    <h2>Phòng {{ room.room_number }}</h2>
+
+                    <p class="room-description">
+                        {{ room.get_room_type_display }}
+                    </p>
+
+                    <div class="room-meta">
+                        <strong>♙ Sức chứa:</strong>
+                        {{ room.capacity }} người
+                    </div>
+
+                    {% if room.description %}
+                        <div class="room-meta">
+                            {{ room.description }}
+                        </div>
+                    {% endif %}
+
+                    <p class="price-label">Giá phòng mỗi đêm</p>
+
+                    <div class="price">
+                        {{ room.price_per_night|floatformat:0 }}
+                        <small>VNĐ / đêm</small>
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- Biểu mẫu đặt phòng -->
+            <section class="form-card">
+
+                <div class="form-heading">
+                    <div class="eyebrow">Thông tin khách hàng</div>
+                    <h2>Phiếu đặt phòng</h2>
+                    <p>Vui lòng nhập chính xác thông tin của bạn.</p>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="message {% if message.tags == 'error' %}message-error{% elif message.tags == 'success' %}message-success{% else %}message-error{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label for="full_name">
+                                Họ và tên <span class="required">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="full_name"
+                                name="full_name"
+                                placeholder="Nhập họ và tên của bạn"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">
+                                Email <span class="required">*</span>
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="example@email.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">
+                                Số điện thoại <span class="required">*</span>
+                            </label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="Nhập số điện thoại"
+                                autocomplete="tel"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="check_in">
+                                Ngày nhận phòng <span class="required">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                id="check_in"
+                                name="check_in"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="check_out">
+                                Ngày trả phòng <span class="required">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                id="check_out"
+                                name="check_out"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="notes">Ghi chú</label>
+                            <textarea
+                                id="notes"
+                                name="notes"
+                                rows="3"
+                                placeholder="Yêu cầu đặc biệt nếu có..."
+                            ></textarea>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn">
+                        Xác nhận đặt phòng →
+                    </button>
+
+                    <p class="form-note">
+                        * Các trường có dấu sao là bắt buộc.
+                    </p>
+                </form>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 Khách sạn ABC · Cảm ơn bạn đã lựa chọn chúng tôi.
+    </footer>
+
+</body>
+</html>
+```

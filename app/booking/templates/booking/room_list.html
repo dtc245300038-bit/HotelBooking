@@ -1,0 +1,465 @@
+```django
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách phòng | HotelBooking</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #f8f5ef;
+            --white: #ffffff;
+            --brown: #49372b;
+            --brown-light: #79634f;
+            --gold: #b99561;
+            --text: #42372f;
+            --muted: #887d72;
+            --green: #55765b;
+            --red: #a65e50;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .navbar {
+            background: var(--white);
+            border-bottom: 1px solid #eee5d8;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            color: var(--brown);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .brand span {
+            color: var(--gold);
+        }
+
+        .nav-link {
+            color: var(--brown-light);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .hero {
+            padding: 65px 20px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(
+                rgba(49, 36, 27, 0.76),
+                rgba(49, 36, 27, 0.76)
+            ), linear-gradient(135deg, #79634f, #b99561);
+        }
+
+        .eyebrow {
+            color: #ead4ae;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(30px, 5vw, 45px);
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #f0e8dc;
+            font-size: 15px;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 45px 22px 65px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .section-heading h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 30px;
+            color: var(--brown);
+            font-weight: 500;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .back-link {
+            color: var(--brown-light);
+            border: 1px solid #d8c7af;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            background: var(--brown);
+            border-color: var(--brown);
+            color: white;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .room-card {
+            background: var(--white);
+            border: 1px solid #eee5d8;
+            border-radius: 9px;
+            overflow: hidden;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .room-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(73, 55, 43, 0.09);
+        }
+
+        .room-banner {
+            min-height: 125px;
+            padding: 24px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #eee3d2, #f8f2e8);
+            border-bottom: 1px solid #eee5d8;
+        }
+
+        .room-label {
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .room-banner h3 {
+            color: var(--brown);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 27px;
+            font-weight: 500;
+        }
+
+        .room-symbol {
+            width: 58px;
+            height: 58px;
+            border: 1px solid #cbb38e;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--brown-light);
+            font-size: 25px;
+            flex-shrink: 0;
+        }
+
+        .room-content {
+            padding: 25px 28px 28px;
+        }
+
+        .room-type {
+            color: var(--brown-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .room-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 11px 0;
+            border-bottom: 1px solid #f1ece4;
+            font-size: 14px;
+        }
+
+        .room-info span:first-child {
+            color: var(--muted);
+        }
+
+        .room-info strong {
+            color: var(--brown);
+            text-align: right;
+        }
+
+        .status {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status.available {
+            background: #eaf2e9;
+            color: var(--green);
+        }
+
+        .status.unavailable {
+            background: #f7e9e5;
+            color: var(--red);
+        }
+
+        .room-bottom {
+            margin-top: 23px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .price-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .price {
+            color: var(--brown);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .price small {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--muted);
+        }
+
+        .btn {
+            display: inline-block;
+            text-align: center;
+            padding: 11px 17px;
+            border-radius: 5px;
+            background: var(--brown);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--gold);
+            color: white;
+        }
+
+        .btn.disabled {
+            background: #e5e0d9;
+            color: #81786f;
+            cursor: not-allowed;
+        }
+
+        .empty {
+            background: white;
+            border: 1px solid #eee5d8;
+            border-radius: 8px;
+            padding: 45px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .empty h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--brown);
+            font-size: 23px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        footer {
+            background: #3d2e24;
+            color: #e9ddcd;
+            text-align: center;
+            padding: 27px 15px;
+            font-size: 13px;
+        }
+
+        footer span {
+            color: #d7b77f;
+        }
+
+        @media (max-width: 700px) {
+            .room-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 48px 18px;
+            }
+
+            .container {
+                padding: 30px 16px 45px;
+            }
+
+            .room-content {
+                padding: 22px;
+            }
+
+            .room-banner {
+                padding: 20px 22px;
+            }
+
+            .section-heading h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="brand">
+            HOTEL<span>BOOKING</span>
+        </a>
+
+        <a href="{% url 'home' %}" class="nav-link">
+            ← Quay lại trang chủ
+        </a>
+    </nav>
+
+    <header class="hero">
+        <p class="eyebrow">Không gian nghỉ dưỡng</p>
+        <h1>Danh sách phòng nghỉ</h1>
+        <p>Khám phá không gian phù hợp cho kỳ nghỉ của bạn.</p>
+    </header>
+
+    <main class="container">
+        <div class="section-heading">
+            <div>
+                <h2>Tất cả phòng</h2>
+                <p>Lựa chọn căn phòng phù hợp với nhu cầu của bạn.</p>
+            </div>
+
+            <a href="{% url 'home' %}" class="back-link">
+                Trang chủ
+            </a>
+        </div>
+
+        {% if rooms %}
+            <div class="room-grid">
+                {% for room in rooms %}
+                    <article class="room-card">
+                        <div class="room-banner">
+                            <div>
+                                <p class="room-label">Phòng nghỉ</p>
+                                <h3>Phòng {{ room.room_number }}</h3>
+                            </div>
+
+                            <div class="room-symbol" aria-hidden="true">
+                                ♧
+                            </div>
+                        </div>
+
+                        <div class="room-content">
+                            <p class="room-type">
+                                {{ room.get_room_type_display }}
+                            </p>
+
+                            <div class="room-info">
+                                <span>Sức chứa</span>
+                                <strong>{{ room.capacity }} người</strong>
+                            </div>
+
+                            <div class="room-info">
+                                <span>Tình trạng</span>
+                                <strong>
+                                    {% if room.is_available %}
+                                        <span class="status available">
+                                            Đang trống
+                                        </span>
+                                    {% else %}
+                                        <span class="status unavailable">
+                                            Không có sẵn
+                                        </span>
+                                    {% endif %}
+                                </strong>
+                            </div>
+
+                            <div class="room-bottom">
+                                <div>
+                                    <p class="price-label">Giá mỗi đêm</p>
+                                    <p class="price">
+    {{ room.price_vnd }}
+    <small>VNĐ</small>
+</p>
+   
+                                </div>
+
+                                {% if room.is_available %}
+                                    <a href="{% url 'book_room' room.id %}"
+                                       class="btn">
+                                        Đặt phòng ngay →
+                                    </a>
+                                {% else %}
+                                    <span class="btn disabled">
+                                        Phòng chưa có sẵn
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty">
+                <h3>Chưa có phòng nghỉ</h3>
+                <p>Hiện chưa có phòng nào trong hệ thống.</p>
+            </div>
+        {% endif %}
+    </main>
+
+    <footer>
+        © HotelBooking — <span>Trải nghiệm nghỉ dưỡng tinh tế</span>
+    </footer>
+</body>
+</html>
+```

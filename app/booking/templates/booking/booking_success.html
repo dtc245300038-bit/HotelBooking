@@ -1,0 +1,466 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đặt phòng thành công | Khách sạn ABC</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #f8f5ef;
+            --white: #ffffff;
+            --brown: #3d291e;
+            --gold: #b58a3a;
+            --gold-dark: #94702e;
+            --text: #40372f;
+            --muted: #81766c;
+            --border: #e8dfd3;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            color: var(--gold-dark);
+            font-family: Georgia, serif;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .logo small {
+            display: block;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .nav-link {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .nav-link:hover {
+            color: var(--gold-dark);
+        }
+
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(
+                    rgba(45, 29, 19, 0.82),
+                    rgba(45, 29, 19, 0.82)
+                ),
+                url("https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1600&q=80")
+                center / cover no-repeat;
+        }
+
+        .hero-label {
+            color: #e4bd70;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: Georgia, serif;
+            font-size: clamp(30px, 5vw, 43px);
+            margin: 10px 0;
+        }
+
+        .hero p {
+            color: #f4e9dc;
+            font-size: 15px;
+        }
+
+        .container {
+            width: min(760px, 92%);
+            margin: -25px auto 60px;
+            position: relative;
+        }
+
+        .success-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(58, 40, 23, 0.09);
+        }
+
+        .success-header {
+            padding: 30px 25px 25px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .success-icon {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #e9f5eb;
+            color: #2f7b43;
+            font-size: 34px;
+            font-weight: bold;
+            border: 1px solid #cce7d1;
+        }
+
+        .success-header h2 {
+            color: var(--brown);
+            font-family: Georgia, serif;
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .success-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .booking-code {
+            margin: 22px auto 0;
+            padding: 15px;
+            max-width: 320px;
+            background: var(--cream);
+            border: 1px dashed var(--gold);
+            border-radius: 10px;
+        }
+
+        .booking-code span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .booking-code strong {
+            color: var(--gold-dark);
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        .details {
+            padding: 27px 30px;
+        }
+
+        .details h3 {
+            color: var(--brown);
+            font-family: Georgia, serif;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 13px 0;
+            border-bottom: 1px solid #f0ebe4;
+            font-size: 14px;
+        }
+
+        .detail-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--muted);
+            flex: 1;
+        }
+
+        .detail-value {
+            color: var(--text);
+            font-weight: 700;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 20px;
+            background: #fff2d8;
+            color: #8b651e;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 19px;
+            background: #faf6ee;
+            border-radius: 10px;
+            border: 1px solid #eee2cf;
+        }
+
+        .total-row span {
+            color: var(--brown);
+            font-weight: 700;
+        }
+
+        .total-price {
+            color: var(--gold-dark);
+            font-size: clamp(20px, 4vw, 27px);
+            font-weight: 800;
+            text-align: right;
+        }
+
+        .notice {
+            margin: 0 30px 25px;
+            padding: 15px 17px;
+            border-radius: 9px;
+            background: #fff8e9;
+            border: 1px solid #f0dfb7;
+            color: #755923;
+            font-size: 13px;
+        }
+
+        .notice strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            padding: 0 30px 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            min-height: 46px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-dark);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--brown);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--cream);
+        }
+
+        .footer {
+            padding: 25px 20px;
+            background: var(--brown);
+            color: #f6eee3;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .container {
+                margin-top: -15px;
+            }
+
+            .success-header {
+                padding: 25px 18px;
+            }
+
+            .details {
+                padding: 23px 20px;
+            }
+
+            .notice {
+                margin: 0 20px 22px;
+            }
+
+            .actions {
+                flex-direction: column;
+                padding: 0 20px 24px;
+            }
+
+            .detail-row {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="{% url 'home' %}" class="logo">
+            Khách sạn ABC
+            <small>COMFORT · LUXURY · RELAX</small>
+        </a>
+
+        <a href="{% url 'home' %}" class="nav-link">
+            Trang chủ
+        </a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-label">Khách sạn ABC</div>
+        <h1>Cảm ơn bạn đã lựa chọn chúng tôi</h1>
+        <p>Chúng tôi rất vui được đồng hành cùng kỳ nghỉ của bạn.</p>
+    </section>
+
+    <main class="container">
+
+        <section class="success-card">
+
+            <div class="success-header">
+                <div class="success-icon">✓</div>
+
+                <h2>Đặt phòng thành công!</h2>
+
+                <p>
+                    Yêu cầu đặt phòng của bạn đã được ghi nhận.
+                </p>
+
+                <div class="booking-code">
+                    <span>Mã đặt phòng của bạn</span>
+                    <strong>#{{ booking.id }}</strong>
+                </div>
+            </div>
+
+            <div class="details">
+                <h3>Chi tiết đặt phòng</h3>
+
+                <div class="detail-row">
+                    <span class="detail-label">Khách hàng</span>
+                    <span class="detail-value">
+                        {{ booking.customer.full_name }}
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Phòng</span>
+                    <span class="detail-value">
+                        {{ booking.room.room_number }} -
+                        {{ booking.room.get_room_type_display }}
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Ngày nhận phòng</span>
+                    <span class="detail-value">
+                        {{ booking.check_in|date:"d/m/Y" }}
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Ngày trả phòng</span>
+                    <span class="detail-value">
+                        {{ booking.check_out|date:"d/m/Y" }}
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Số đêm</span>
+                    <span class="detail-value">
+                        {{ nights }} đêm
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Trạng thái</span>
+                    <span class="detail-value">
+                        <span class="status">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </span>
+                </div>
+
+                <div class="total-row">
+                    <span>Tổng tiền</span>
+                    <div class="total-price">
+                        {{ booking.total_price|floatformat:0 }} VNĐ
+                    </div>
+                </div>
+            </div>
+
+            <div class="notice">
+                <strong>✦ Lưu ý quan trọng</strong>
+                Đơn đặt phòng của bạn đang ở trạng thái
+                <strong>{{ booking.get_status_display }}</strong>.
+                Vui lòng lưu lại mã đặt phòng để tiện tra cứu khi cần.
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    ← Về trang chủ
+                </a>
+
+                <a href="{% url 'room_list' %}" class="btn btn-secondary">
+                    Xem danh sách phòng
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 Khách sạn ABC · Cảm ơn bạn đã lựa chọn chúng tôi.
+    </footer>
+
+</body>
+</html>
+```
